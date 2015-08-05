@@ -224,6 +224,15 @@ module.exports = function (grunt) {
                     ]
                 }
             }
+        },
+        casperjs: {
+            options: {
+                casperjsOptions: ['--urlstart=http://localhost:9000/'],
+                async: {
+                    parallel: false
+                }
+            },
+            files: ['it/todo*.js']
         }
     });
 
@@ -301,4 +310,6 @@ module.exports = function (grunt) {
         'test',
         'build'
     ]);
+
+    grunt.loadNpmTasks('grunt-casperjs');
 };

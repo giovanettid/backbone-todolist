@@ -11,8 +11,8 @@ var app = app || {};
 
             this.listenTo(app.todos, 'add', this.addOne);
             //ou app.todos.on('add', this.addOne, this);
-            this.listenTo(app.todos, 'reset', this.addAll)
-
+            this.listenTo(app.todos, 'reset', this.addAll);
+            this.listenTo(app.todos, 'filter', this.filterAll);
             this.allCheckbox = this.$('#toggle-all')[0];
 
             app.todos.fetch();
@@ -40,20 +40,16 @@ var app = app || {};
         },
 
         addAll: function () {
-            this.$('#todo-list').html(''); // clean the todo list
+            this.$('#todo-list').html('');
+            app.todos.each(this.addOne, this);
+        },
 
-            // filter todo item list
-            switch (window.filter) {
-                case 'pending':
-                    _.each(app.todos.remaining(), this.addOne);
-                    break;
-                case 'completed':
-                    _.each(app.todos.completed(), this.addOne);
-                    break;
-                default:
-                    app.todos.each(this.addOne, this);
-                    break;
-            }
+        filterOne: function (todo) {
+            todo.trigger('visible');
+        },
+
+        filterAll: function () {
+            app.todos.each(this.filterOne, this);
         },
 
         toggleAllComplete: function () {

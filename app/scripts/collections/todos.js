@@ -22,4 +22,3 @@ var app = app || {};
     app.todos = new app.Todos();
 })();
 
-app.todos = new app.Todos();

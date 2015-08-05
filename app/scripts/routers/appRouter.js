@@ -8,8 +8,8 @@ var app = app || {};
         },
         setFilter: function (params) {
             console.log('params: ' + params);
-            window.filter = params || '';
-            app.todos.trigger('reset');
+            app.TodoFilter = params || '';
+            app.todos.trigger('filter');
         }
     });
 })();
