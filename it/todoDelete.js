@@ -1,32 +1,30 @@
 phantom.page.injectJs("it/page/todoPage.js");
 
-casper.test.begin('Todo delete scenario', 3, function suite(test) {
-    casper.start(casper.cli.get("urlstart"), function() {
-        page.todo.reset();
+describe('Todo delete scenario', function() {
+    before(function () {
+        casper.start(casper.cli.get("urlstart"), function () {
+            page.todo.reset();
+        });
     });
 
-    casper.then(function() {
-        test.comment("ajout deux todo dans la todo list et suppression second todo");
+    it('ajout deux todo dans la todo list et suppression second todo',function() {
+        casper.then(function() {
+            page.todo.typeNew('first todo').enterNew();
+            page.todo.typeNew('second todo').enterNew();
+            page.todo.mouseOverNth(2).deleteNth(2);
 
-        page.todo.typeNew('first todo').enterNew();
-        page.todo.typeNew('second todo').enterNew();
-        page.todo.mouseOverNth(2).deleteNth(2);
-
-        test.assertEquals(page.todo.first(),'first todo');
-        test.assertEquals(page.todo.nbVisible(),1);
+            expect(page.todo.first()).to.equal('first todo');
+            expect(page.todo.nbVisible()).to.equal(1);
+        });
     });
 
-    casper.then(function() {
-        test.comment("suppression du seul todo restant");
+    it('suppression du seul todo restant',function() {
+        casper.then(function() {
+            page.todo.mouseOverFirst();
+            page.todo.deleteFirst();
 
-        page.todo.mouseOverFirst();
-        page.todo.deleteFirst();
-
-        test.assertEquals(page.todo.nbVisible(),0);
-    });
-
-    casper.run(function() {
-        test.done();
+            expect(page.todo.nbVisible()).to.equal(0);
+        });
     });
 
 });

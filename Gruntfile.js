@@ -233,6 +233,16 @@ module.exports = function (grunt) {
                 }
             },
             files: ['it/todo*.js']
+        },
+        mocha_casperjs: {
+            options: {
+                urlstart: 'http://localhost:9000/',
+                timeout: 5000,
+                color: false
+            },
+            files: {
+                src: ['it/todo*.js']
+            }
         }
     });
 
@@ -312,4 +322,5 @@ module.exports = function (grunt) {
     ]);
 
     grunt.loadNpmTasks('grunt-casperjs');
+    grunt.loadNpmTasks('grunt-mocha-casperjs');
 };

@@ -1,26 +1,25 @@
 phantom.page.injectJs("it/page/todoPage.js");
 
-casper.test.begin('Todo edit scenario', 3, function suite(test) {
-    casper.start(casper.cli.get("urlstart"), function() {
-        page.todo.reset();
+describe('Todo edit scenario', function() {
+    before(function () {
+        casper.start(casper.cli.get("urlstart"), function () {
+            page.todo.reset();
+        });
     });
 
-    casper.then(function() {
-        test.comment("edition d'un todo");
+    it("edition d'un todo",function() {
+        casper.then(function() {
+            page.todo.typeNew('first todo').enterNew();
+            page.todo.typeNew('second todo').enterNew();
 
-        page.todo.typeNew('first todo').enterNew();
-        page.todo.typeNew('second todo').enterNew();
+            expect(page.todo.nbVisible()).to.be.equal(2);
 
-        test.assertEquals(page.todo.nbVisible(),2);
+            page.todo.doubleClickFirst();
+            page.todo.editFirst(' edited').enterFirst();
 
-        page.todo.doubleClickFirst();
-        page.todo.editFirst(' edited').enterFirst();
-
-        test.assertEquals(page.todo.first(),'first todo edited');
-        test.assertEquals(page.todo.nbVisible(),2);
-    });
-
-    casper.run(function() {
-        test.done();
+            expect(page.todo.first()).to.be.equal('first todo edited');
+            expect(page.todo.nbVisible()).to.be.equal(2);
+        });
     });
 });
+

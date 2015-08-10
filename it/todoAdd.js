@@ -1,33 +1,31 @@
 phantom.page.injectJs("it/page/todoPage.js");
 
-casper.test.begin('Todo add scenario', 5, function suite(test) {
-    casper.start(casper.cli.get("urlstart"), function() {
-        page.todo.reset();
-        test.assertTitle("TodoListWithBB");
+describe('Todo add scenario', function() {
+    before(function () {
+        casper.start(casper.cli.get("urlstart"), function () {
+            page.todo.reset();
+            expect("TodoListWithBB").to.matchTitle;
+        });
     });
 
-    casper.then(function() {
-        test.comment("titre de la todo list");
-
-        test.assertEquals(page.todo.titleList(), 'todos');
+    it('titre de la todo list', function() {
+        casper.then(function() {
+            expect(page.todo.titleList()).to.equal('todos');
+        });
     });
 
-    casper.then(function() {
-        test.comment("ajout premier dans la todo list");
-
-        page.todo.typeNew('first todo').enterNew();
-        test.assertEquals(page.todo.first(),'first todo');
+    it('ajout premier dans la todo list',function() {
+        casper.then(function() {
+            page.todo.typeNew('first todo').enterNew();
+            expect(page.todo.first()).to.equal('first todo');
+        });
     });
 
-    casper.then(function() {
-        test.comment("ajout deuxieme todo dans la todo list");
-
-        page.todo.typeNew('second todo').enterNew();
-        test.assertEquals(page.todo.nbVisible(),2);
-        test.assertEquals(page.todo.nthText(2),'second todo');
-    });
-
-    casper.run(function() {
-        test.done();
+    it('ajout deuxieme todo dans la todo list',function() {
+        casper.then(function() {
+            page.todo.typeNew('second todo').enterNew();
+            expect(page.todo.nbVisible()).to.equal(2);
+            expect(page.todo.nthText(2)).to.equal('second todo');
+        });
     });
 });
