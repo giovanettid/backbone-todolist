@@ -19,7 +19,7 @@
     "grunt-contrib-jst": "^0.6.0",
     "grunt-contrib-uglify": "^0.6.0",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-contribll-cssmin": "^0.10.0",
+    "grunt-contrib-cssmin": "^0.10.0",
     "grunt-mocha": "^0.4.11",
     "grunt-mocha-casperjs": "^1.4.4",
     "grunt-open": "^0.2.3",

@@ -1,24 +1,23 @@
-phantom.page.injectJs("it/page/todoPage.js");
+
+var todo = require("./page/todoPage.js");
 
 describe('Todo edit scenario', function() {
     before(function () {
-        casper.start(casper.cli.get("urlstart"), function () {
-            page.todo.reset();
-        });
+        todo.before();
     });
 
     it("edition d'un todo",function() {
-        casper.then(function() {
-            page.todo.typeNew('first todo').enterNew();
-            page.todo.typeNew('second todo').enterNew();
+        todo.test(function() {
+            todo.typeNew('first todo').enterNew();
+            todo.typeNew('second todo').enterNew();
 
-            expect(page.todo.nbVisible()).to.be.equal(2);
+            expect(todo.nbVisible()).to.be.equal(2);
 
-            page.todo.doubleClickFirst();
-            page.todo.editFirst(' edited').enterFirst();
+            todo.doubleClickFirst();
+            todo.editFirst(' edited').enterFirst();
 
-            expect(page.todo.first()).to.be.equal('first todo edited');
-            expect(page.todo.nbVisible()).to.be.equal(2);
+            expect(todo.first()).to.be.equal('first todo edited');
+            expect(todo.nbVisible()).to.be.equal(2);
         });
     });
 });

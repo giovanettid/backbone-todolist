@@ -1,11 +1,12 @@
 
 var page = page || {};
+var require = patchRequire(require);
 
-(function () {
+ (function () {
     'use strict';
 
-    var mouse = require("mouse").create(casper);
-    var _ = require('underscore');
+     var _ = require('underscore');
+     var mouse = require("mouse").create(casper);
 
     function TodoPage() {
 
@@ -29,11 +30,20 @@ var page = page || {};
         var nthHidden = _.partial(nthChildAndSelector,'.hidden');
         var nthNotHidden = _.partial(nthChildAndSelector,':not(.hidden)');
 
-        this.reset = function() {
-            return casper.evaluate(function() {
-                app.todos.reset();
+        this.before = function() {
+            casper.on('remote.message', function(message) {
+                this.echo(message);
+            });
+            casper.start(casper.cli.get("urlstart"), function () {
+                return casper.evaluate(function() {
+                    app.todos.reset();
+                });
             });
         };
+
+        this.test = function(fn) {
+            casper.then(fn);
+        }
 
         this.titleList = function() {
             return casper.evaluate(function(selector) {
@@ -130,5 +140,8 @@ var page = page || {};
     }
 
     page.todo = new TodoPage();
+
 }());
+
+module.exports = page.todo;
 
