@@ -75,7 +75,7 @@ module.exports = function (grunt) {
             },
             test: {
                 options: {
-                    port: 9001,
+                    port: 9000,
                     middleware: function (connect) {
                         return [
                             mountFolder(connect, 'test'),
@@ -225,6 +225,11 @@ module.exports = function (grunt) {
                 }
             }
         },
+        bowerRequirejs: {
+            target: {
+                rjsConfig: 'app/scripts/config.js'
+            }
+        },
         casperjs: {
             options: {
                 casperjsOptions: ['--urlstart=http://localhost:9000/'],
@@ -236,7 +241,7 @@ module.exports = function (grunt) {
         },
         mocha_casperjs: {
             options: {
-                urlstart: 'http://localhost:9000/',
+                urlstart: 'http://localhost:9000',
                 timeout: 5000,
                 color: false
             },
@@ -321,6 +326,7 @@ module.exports = function (grunt) {
         'build'
     ]);
 
+    grunt.loadNpmTasks('grunt-bower-requirejs');
     grunt.loadNpmTasks('grunt-casperjs');
     grunt.loadNpmTasks('grunt-mocha-casperjs');
 };

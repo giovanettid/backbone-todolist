@@ -1,10 +1,9 @@
-/*global Backbone */
-var app = app || {};
-
-(function () {
+define([
+    'backbone'
+], function (Backbone) {
     'use strict';
 
-    app.Todo = Backbone.Model.extend({
+    var Todo = Backbone.Model.extend({
         defaults: {
             title: '',
             completed: false
@@ -15,8 +14,8 @@ var app = app || {};
             });
         }
     });
-
-})();
+    return Todo;
+});
 
 
 

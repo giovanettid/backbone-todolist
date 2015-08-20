@@ -1,15 +1,20 @@
-var app = app || {};
-
-(function () {
+define([
+    'jquery',
+    'backbone',
+    'collections/todos',
+    'common'
+], function ($, Backbone, Todos, Common) {
     'use  strict';
-    app.TodoRouter = Backbone.Router.extend({
+    var TodoRouter = Backbone.Router.extend({
         routes: {
             "*filter": 'setFilter'
         },
         setFilter: function (params) {
             console.log('params: ' + params);
-            app.TodoFilter = params || '';
-            app.todos.trigger('filter');
+            Common.TodoFilter = params || '';
+            Todos.trigger('filter');
         }
     });
-})();
+
+    return TodoRouter;
+});

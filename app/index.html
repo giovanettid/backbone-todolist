@@ -9,10 +9,6 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="bower_components/todomvc-common/base.css">
-    <!-- endbuild -->
-    <!-- build:js scripts/app.js  scripts/vendor/modernizr.js -->
-    <script src="bower_components/modernizr/modernizr.js"></script>
-    <!-- endbuild -->
 </head>
 <body>
 <!--[if lt IE 10]>
@@ -40,16 +36,7 @@
 <footer id="info">
     <p>Double-click to edit a todo</p>
 </footer>
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<script src="bower_components/lodash/dist/lodash.compat.js"></script>
-<script src="bower_components/backbone/backbone.js"></script>
-<script type="text/javascript" src="bower_components/backbone.localStorage/backbone.localStorage.js"></script>
-<script src="scripts/main.js"></script>
-<script src="scripts/routers/appRouter.js"></script>
-<script src="scripts/models/todo.js"></script>
-<script src="scripts/collections/todos.js"></script>
-<script src="scripts/views/appView.js"></script>
-<script src="scripts/views/todoView.js"></script>
+<script data-main="scripts/config" src="bower_components/requirejs/require.js"></script>
 <script type="text/template" id="item-template">
     <div class="view">
         <input class="toggle" type="checkbox" <%= completed ? 'checked' : '' %>>

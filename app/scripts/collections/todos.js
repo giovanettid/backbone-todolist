@@ -1,11 +1,13 @@
-var app = app || {};
-
-(function () {
+define([
+    'backbone',
+    'backbone.localstorage',
+    'models/todo'
+], function (Backbone, Storage, Todo) {
     'use strict';
 
-    app.Todos = Backbone.Collection.extend({
-        model: app.Todo,
-        localStorage: new Backbone.LocalStorage("todos-backbone"),
+    var Todos = Backbone.Collection.extend({
+        model: Todo,
+        localStorage: new Storage("todos-backbone"),
 
         completed: function () {
             return this.filter(function (todo) {
@@ -19,6 +21,6 @@ var app = app || {};
 
         });
 
-    app.todos = new app.Todos();
-})();
+    return new Todos();
+});
 

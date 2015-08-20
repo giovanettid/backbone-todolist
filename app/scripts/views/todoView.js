@@ -1,9 +1,11 @@
-var app = app || {};
-
-(function (){
+define([
+    'jquery',
+    'backbone',
+    'common'
+], function ($, Backbone, Common) {
     'use strict';
 
-    app.TodoView = Backbone.View.extend({
+    var TodoView = Backbone.View.extend({
         tagName: 'li',
 
         initialize: function () {
@@ -28,13 +30,13 @@ var app = app || {};
         },
 
         updateOnEnter: function (e) {
-            if (e.which === ENTER_KEY) {
+            if (e.which === Common.ENTER_KEY) {
                 this.close();
             }
         },
 
         revertOnEscape: function (e) {
-            if (e.which === ESC_KEY) {
+            if (e.which === Common.ESC_KEY) {
                 this.$el.removeClass('editing');
                 // Also reset the hidden input back to the original value.
                 this.$input.val(this.model.get('title'));
@@ -63,8 +65,8 @@ var app = app || {};
 
         isHidden: function () {
             return this.model.get('completed') ?
-            app.TodoFilter === 'pending' :
-            app.TodoFilter === 'completed';
+            Common.TodoFilter === 'pending' :
+            Common.TodoFilter === 'completed';
         },
 
         toggleCompleted: function () {
@@ -80,4 +82,5 @@ var app = app || {};
         }
     });
 
-})();
+    return TodoView;
+});
