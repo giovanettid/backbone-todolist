@@ -59,7 +59,6 @@ define([
         },
 
         toggleVisible: function () {
-            console.log('hidden: ' + this.isHidden());
             this.$el.toggleClass('hidden', this.isHidden());
         },
 

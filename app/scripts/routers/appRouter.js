@@ -10,7 +10,6 @@ define([
             "*filter": 'setFilter'
         },
         setFilter: function (params) {
-            console.log('params: ' + params);
             Common.TodoFilter = params || '';
             Todos.trigger('filter');
         }

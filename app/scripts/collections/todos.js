@@ -1,13 +1,13 @@
 define([
     'backbone',
-    'backbone.localstorage',
+    'backboneLocalstorage',
     'models/todo'
-], function (Backbone, Storage, Todo) {
+], function (Backbone, Store, Todo) {
     'use strict';
 
     var Todos = Backbone.Collection.extend({
         model: Todo,
-        localStorage: new Storage("todos-backbone"),
+        localStorage: new Store("todos-backbone"),
 
         completed: function () {
             return this.filter(function (todo) {

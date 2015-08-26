@@ -227,7 +227,7 @@ module.exports = function (grunt) {
         },
         bowerRequirejs: {
             target: {
-                rjsConfig: 'app/scripts/config.js'
+                rjsConfig: 'app/scripts/main.js'
             }
         },
         casperjs: {

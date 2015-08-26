@@ -20,9 +20,6 @@ define([
             this.allCheckbox = this.$('#toggle-all')[0];
 
             Todos.fetch();
-
-            console.log('init app view');
-
         },
 
         events: {
