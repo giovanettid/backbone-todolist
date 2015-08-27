@@ -1,7 +1,7 @@
 
 var require = patchRequire(require);
 
-var _ = require('underscore');
+var _ = require('../bower_components/underscore/underscore');
 var mouse = require("mouse").create(casper);
 
 function TodoPage() {
