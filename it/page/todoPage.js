@@ -27,16 +27,11 @@ function TodoPage() {
     var nthHidden = _.partial(nthChildAndSelector,'.hidden');
     var nthNotHidden = _.partial(nthChildAndSelector,':not(.hidden)');
 
-    this.start = false;
+    casper.on('remote.message', function(message) {
+        this.echo(message);
+    });
 
     this.before = function() {
-
-        if (this.start === false) {
-            casper.on('remote.message', function(message) {
-                this.echo(message);
-            });
-            this.start = true;
-        }
 
         casper.start(casper.cli.get("urlstart"), function() {
             return casper.evaluate(function() {
