@@ -1,35 +1,28 @@
 
-var todo = require("./page/todoPage.js");
+var todo = require("./page/todoPage");
+var expect = require("./bower_components/chai/chai").expect;
 
 describe('Todo add scenario', function() {
-    before(function () {
-        todo.before();
+    before(function(done) {
+        todo.before(done);
     });
 
     it('titre de la page', function() {
-        todo.test(function() {
-            expect("TodoListWithBB").to.matchTitle;
-        });
+        expect(todo.title()).to.equal('TodoListWithBB');
     });
 
     it('titre de la todo list', function() {
-        todo.test(function() {
-            expect(todo.titleList()).to.equal('todos');
-        });
+        expect(todo.titleList()).to.equal('todos');
     });
 
     it('ajout premier dans la todo list',function() {
-        todo.test(function() {
-            todo.typeNew('first todo').enterNew();
-            expect(todo.first()).to.equal('first todo');
-        });
+        todo.typeNew('first todo').enterNew();
+        expect(todo.first()).to.equal('first todo');
     });
 
     it('ajout deuxieme todo dans la todo list',function() {
-        todo.test(function() {
-            todo.typeNew('second todo').enterNew();
-            expect(todo.nbVisible()).to.equal(2);
-            expect(todo.nthText(2)).to.equal('second todo');
-        });
+        todo.typeNew('second todo').enterNew();
+        expect(todo.nbVisible()).to.equal(2);
+        expect(todo.nthText(2)).to.equal('second todo');
     });
 });

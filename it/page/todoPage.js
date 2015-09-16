@@ -1,15 +1,19 @@
 
-var require = patchRequire(require);
 
+var Browser = require('zombie');
 var _ = require('../bower_components/underscore/underscore');
-var mouse = require("mouse").create(casper);
+var config = require('../config');
 
 function TodoPage() {
     'use strict';
 
+    var ENTER_KEY = 13;
+
     var idNew = '#new-todo';
-    var title = '#header > h1';
+    var title = 'title';
+    var titleList = '#header > h1';
     var children = '#todo-list li';
+    var childrenVisible = '#todo-list li:not(.hidden)';
     var toggleAll = '#toggle-all';
 
     var nthChild = function(n) {
@@ -20,6 +24,10 @@ function TodoPage() {
         return nthChild(n) + selector;
     };
 
+    var enterKey = function(selector) {
+        browser.evaluate("var e = $.Event('keypress');e.which = "+ENTER_KEY+";$('"+selector+"').trigger(e);");
+    };
+
     var nthLabel = _.partial(nthChildAndSelector,' label');
     var nthInput = _.partial(nthChildAndSelector,' input.edit');
     var nthDestroyBtn = _.partial(nthChildAndSelector,' button.destroy');
@@ -27,77 +35,53 @@ function TodoPage() {
     var nthHidden = _.partial(nthChildAndSelector,'.hidden');
     var nthNotHidden = _.partial(nthChildAndSelector,':not(.hidden)');
 
-    casper.on('remote.message', function(message) {
-        this.echo(message);
-    });
+    var browser = new Browser();
 
-    this.before = function() {
-
-        casper.start(casper.cli.get("urlstart"), function() {
-            return casper.evaluate(function() {
-                window.localStorage.clear();
-            });
-        });
-
+    this.before = function(done){
+        browser.visit(config.url,done);
+        browser.evaluate("window.localStorage.clear();");
     };
 
-    this.test = function(fn) {
-        casper.then(fn);
-    }
+    this.title = function() {
+        return browser.text(title);
+    };
 
     this.titleList = function() {
-        return casper.evaluate(function(selector) {
-            return __utils__.findOne(selector).textContent;
-        },title);
+        return browser.text(titleList);
     };
 
     this.typeNew = function(newTodo) {
-        casper.sendKeys(idNew, newTodo);
+        browser.fill(idNew, newTodo);
         return this;
     };
 
     this.enterNew = function() {
-        casper.sendKeys(idNew, casper.page.event.key.Enter);
-    };
-
-    this.waitNthNotVisible = function(n,fn) {
-        casper.waitForSelector(nthHidden(n),fn);
-    };
-
-    this.waitNthVisible = function(n,fn) {
-        casper.waitForSelector(nthNotHidden(n),fn);
+        enterKey(idNew);
     };
 
     this.nbVisible = function() {
-        return casper.evaluate(function(selector) {
-            return _.chain(_.toArray(__utils__.findAll(selector)))
-                        .filter(function(element){return window.getComputedStyle(element).display !== 'none';})
-                        .reduce(function(count) { return ++count;},0)
-                        .value();
-        },children);
+        return browser.querySelectorAll(childrenVisible).length;
     };
 
     this.nthText = function(nth) {
-        return casper.evaluate(function(selector) {
-            return __utils__.findOne(selector).textContent;
-        },nthLabel(nth));
+        return browser.text(nthLabel(nth));
     };
 
     this.mouseOverNth = function(nth) {
-        mouse.move(nthChild(nth));
+        browser.fire(nthChild(nth),'mouseover');
         return this;
     };
 
     this.deleteNth = function(nth) {
-        casper.click(nthDestroyBtn(nth));
+        browser.click(nthDestroyBtn(nth));
     };
 
     this.done = function(nth) {
-        casper.click(nthCheckbox(nth));
+        browser.click(nthCheckbox(nth));
     };
 
     this.doneAll = function() {
-        casper.click(toggleAll);
+        browser.evaluate("$('"+toggleAll+"').click()");
     };
 
     this.undo = function(nth) {
@@ -109,26 +93,20 @@ function TodoPage() {
     };
 
     this.nthCompleted = function(nth) {
-        return casper.evaluate(function(selector) {
-            return __utils__.findOne(selector).checked;
-        },nthCheckbox(nth));
+        return browser.querySelector(nthCheckbox(nth)).checked;
     };
 
     this.doubleClickNth = function(nth) {
-        mouse.doubleclick(nthLabel(nth));
+        browser.fire(nthLabel(nth),'dblclick');
     };
 
     this.editNth = function(nth,todo) {
-        casper.sendKeys(nthInput(nth),todo);
+        browser.fill(nthInput(nth),browser.text(nthLabel(nth))+todo);
         return this;
     };
 
     this.enterNth = function(nth) {
-        casper.sendKeys(nthInput(nth), casper.page.event.key.Enter);
-    };
-
-    this.show = function(label) {
-        casper.clickLabel(label,'a');
+        enterKey(nthInput(nth));
     };
 
     this.first = _.partial(this.nthText,1);
@@ -137,6 +115,7 @@ function TodoPage() {
     this.doubleClickFirst = _.partial(this.doubleClickNth,1);
     this.editFirst = _.partial(this.editNth,1);
     this.enterFirst = _.partial(this.enterNth,1);
+
 }
 
 module.exports = new TodoPage();

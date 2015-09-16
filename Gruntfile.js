@@ -30,11 +30,11 @@ module.exports = function (grunt) {
         watch: {
             options: {
                 nospawn: true,
-                livereload: LIVERELOAD_PORT
+                livereload: grunt.option('livereloadport') || false
             },
             livereload: {
                 options: {
-                    livereload: grunt.option('livereloadport') || LIVERELOAD_PORT
+                    livereload: grunt.option('livereloadport') || false
                 },
                 files: [
                     '<%= yeoman.app %>/*.html',
@@ -64,6 +64,7 @@ module.exports = function (grunt) {
             },
             livereload: {
                 options: {
+                    livereload: grunt.option('liveoption') || false,
                     middleware: function (connect) {
                         return [
                             lrSnippet,
@@ -230,22 +231,11 @@ module.exports = function (grunt) {
                 rjsConfig: 'app/scripts/main.js'
             }
         },
-        casperjs: {
-            options: {
-                casperjsOptions: ['--urlstart=http://localhost:9000/'],
-                async: {
-                    parallel: false
-                }
-            },
-            files: ['it/todo*.js']
-        },
-        mocha_casperjs: {
-            options: {
-                urlstart: 'http://localhost:9000',
-                timeout: 5000,
-                color: false
-            },
-            files: {
+        mochaTest: {
+            test: {
+                options: {
+                    reporter: 'spec'
+                },
                 src: ['it/todo*.js']
             }
         }
@@ -327,6 +317,5 @@ module.exports = function (grunt) {
     ]);
 
     grunt.loadNpmTasks('grunt-bower-requirejs');
-    grunt.loadNpmTasks('grunt-casperjs');
-    grunt.loadNpmTasks('grunt-mocha-casperjs');
+    grunt.loadNpmTasks('grunt-mocha-test');
 };
