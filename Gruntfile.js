@@ -238,6 +238,12 @@ module.exports = function (grunt) {
                 },
                 src: ['it/todo*.js']
             }
+        },
+        cucumberjs: {
+            src: 'it/features',
+            options: {
+                steps: "it/features/step_definitions"
+            }
         }
     });
 
@@ -318,4 +324,5 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-bower-requirejs');
     grunt.loadNpmTasks('grunt-mocha-test');
+    grunt.loadNpmTasks('grunt-cucumber');
 };

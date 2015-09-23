@@ -32,6 +32,7 @@ function TodoPage() {
     var nthInput = _.partial(nthChildAndSelector,' input.edit');
     var nthDestroyBtn = _.partial(nthChildAndSelector,' button.destroy');
     var nthCheckbox = _.partial(nthChildAndSelector,' input.toggle');
+    var nthCompleted = _.partial(nthChildAndSelector,'.completed');
     var nthHidden = _.partial(nthChildAndSelector,'.hidden');
     var nthNotHidden = _.partial(nthChildAndSelector,':not(.hidden)');
 
@@ -93,7 +94,7 @@ function TodoPage() {
     };
 
     this.nthCompleted = function(nth) {
-        return browser.querySelector(nthCheckbox(nth)).checked;
+        return _.isElement(browser.querySelector(nthCompleted(nth)));
     };
 
     this.doubleClickNth = function(nth) {
