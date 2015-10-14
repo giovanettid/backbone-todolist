@@ -1,10 +1,13 @@
 
-var todo = require("./page/todoPage");
-var expect = require("./bower_components/chai/chai").expect;
+var main = require("./main");
+var todo = main.todo,
+    expect = main.expect,
+    Q = main.Q;
 
 describe('Todo delete scenario', function() {
-    before(function (done) {
-        todo.before(done);
+
+    before(function() {
+        return todo.before();
     });
 
     it('ajout deux todo dans la todo list et suppression second todo',function() {
@@ -12,15 +15,22 @@ describe('Todo delete scenario', function() {
         todo.typeNew('second todo').enterNew();
         todo.mouseOverNth(2).deleteNth(2);
 
-        expect(todo.first()).to.equal('first todo');
-        expect(todo.nbVisible()).to.equal(1);
+        return Q.all([
+            expect(todo.first()).to.eventually.equal('first todo'),
+            expect(todo.nbVisible()).to.eventually.have.length(1)
+        ]);
+
     });
 
     it('suppression du seul todo restant',function() {
         todo.mouseOverFirst();
         todo.deleteFirst();
 
-        expect(todo.nbVisible()).to.equal(0);
+        return expect(todo.nbVisible()).to.eventually.be.empty;
+    });
+
+    after(function() {
+        return todo.after();
     });
 
 });

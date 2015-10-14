@@ -27,8 +27,8 @@
     "jshint-stylish": "^1.0.0",
     "load-grunt-tasks": "^0.6.0",
     "mocha": "^2.3.0",
-    "time-grunt": "^1.0.0",
-    "zombie": "^4.1.0"
+    "selenium-webdriver": "^2.47.0",
+    "time-grunt": "^1.0.0"
   },
   "engines": {
     "node": ">=0.10.0"

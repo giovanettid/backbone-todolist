@@ -1,13 +1,12 @@
 
-
-var Browser = require('zombie');
-var _ = require('../bower_components/underscore/underscore');
 var config = require('../config');
+var _ = require('../bower_components/underscore/underscore');
+
+var webdriver = require('selenium-webdriver');
+var By = require('selenium-webdriver').By;
 
 function TodoPage() {
     'use strict';
-
-    var ENTER_KEY = 13;
 
     var idNew = '#new-todo';
     var title = 'title';
@@ -24,8 +23,12 @@ function TodoPage() {
         return nthChild(n) + selector;
     };
 
+    var find = function(selector) {
+        return driver.findElement(By.css(selector));
+    };
+
     var enterKey = function(selector) {
-        browser.evaluate("var e = $.Event('keypress');e.which = "+ENTER_KEY+";$('"+selector+"').trigger(e);");
+        find(selector).sendKeys(webdriver.Key.ENTER);
     };
 
     var nthLabel = _.partial(nthChildAndSelector,' label');
@@ -36,23 +39,35 @@ function TodoPage() {
     var nthHidden = _.partial(nthChildAndSelector,'.hidden');
     var nthNotHidden = _.partial(nthChildAndSelector,':not(.hidden)');
 
-    var browser = new Browser();
+    var driver;
 
-    this.before = function(done){
-        browser.visit(config.url,done);
-        browser.evaluate("window.localStorage.clear();");
+    var capabilities = {
+        chrome: webdriver.Capabilities.chrome(),
+        phantomjs: webdriver.Capabilities.phantomjs()
+    };
+
+    this.before = function() {
+        driver = new webdriver.Builder()
+            .withCapabilities(capabilities[config.browser]).build();
+        driver.get(config.url);
+        driver.executeScript('window.localStorage.clear();');
+        return driver.navigate().refresh();
+    };
+
+    this.after = function() {
+        return driver.quit();
     };
 
     this.title = function() {
-        return browser.text(title);
+        return driver.getTitle();
     };
 
     this.titleList = function() {
-        return browser.text(titleList);
+        return find(titleList).getText();
     };
 
     this.typeNew = function(newTodo) {
-        browser.fill(idNew, newTodo);
+        find(idNew).sendKeys(newTodo);
         return this;
     };
 
@@ -61,28 +76,30 @@ function TodoPage() {
     };
 
     this.nbVisible = function() {
-        return browser.querySelectorAll(childrenVisible).length;
+        return webdriver.promise.filter(driver.findElements(By.css(childrenVisible)), function(element) {
+                return element.isDisplayed();
+            });
     };
 
     this.nthText = function(nth) {
-        return browser.text(nthLabel(nth));
+        return find(nthLabel(nth)).getText();
     };
 
     this.mouseOverNth = function(nth) {
-        browser.fire(nthChild(nth),'mouseover');
+        new webdriver.ActionSequence(driver).mouseMove(find(nthChild(nth))).perform();
         return this;
     };
 
     this.deleteNth = function(nth) {
-        browser.click(nthDestroyBtn(nth));
+        find(nthDestroyBtn(nth)).click();
     };
 
     this.done = function(nth) {
-        browser.click(nthCheckbox(nth));
+        find(nthCheckbox(nth)).click();
     };
 
     this.doneAll = function() {
-        browser.evaluate("$('"+toggleAll+"').click()");
+        find(toggleAll).click();
     };
 
     this.undo = function(nth) {
@@ -94,20 +111,26 @@ function TodoPage() {
     };
 
     this.nthCompleted = function(nth) {
-        return _.isElement(browser.querySelector(nthCompleted(nth)));
+        return driver.findElements(By.css(nthCompleted(nth))).then(function (elements) {
+            return _.isArray(elements) && elements.length === 1;
+        });
     };
 
     this.doubleClickNth = function(nth) {
-        browser.fire(nthLabel(nth),'dblclick');
+        new webdriver.ActionSequence(driver).mouseMove(find(nthLabel(nth))).doubleClick().perform();
     };
 
     this.editNth = function(nth,todo) {
-        browser.fill(nthInput(nth),browser.text(nthLabel(nth))+todo);
+        find(nthInput(nth)).sendKeys(todo);
         return this;
     };
 
     this.enterNth = function(nth) {
         enterKey(nthInput(nth));
+    };
+
+    this.show = function(label) {
+        driver.findElement(By.linkText(label)).click();
     };
 
     this.first = _.partial(this.nthText,1);
@@ -120,4 +143,3 @@ function TodoPage() {
 }
 
 module.exports = new TodoPage();
-

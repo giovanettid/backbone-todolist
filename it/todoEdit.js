@@ -1,22 +1,32 @@
 
-var todo = require("./page/todoPage");
-var expect = require("./bower_components/chai/chai").expect;
+var main = require("./main");
+var todo = main.todo,
+    expect = main.expect,
+    Q = main.Q;
 
 describe('Todo edit scenario', function() {
-    before(function (done) {
-        todo.before(done);
+
+    before(function () {
+        return todo.before();
     });
 
     it("edition d'un todo",function() {
         todo.typeNew('first todo').enterNew();
         todo.typeNew('second todo').enterNew();
 
-        expect(todo.nbVisible()).to.be.equal(2);
-
         todo.doubleClickFirst();
         todo.editFirst(' edited').enterFirst();
-        expect(todo.first()).to.be.equal('first todo edited');
-        expect(todo.nbVisible()).to.be.equal(2);
+
+        return Q.all([
+            expect(todo.first()).to.be.eventually.equal('first todo edited'),
+            expect(todo.nbVisible()).to.eventually.have.length(2)
+        ]);
+
     });
+
+    after(function() {
+        return todo.after();
+    });
+
 });
 

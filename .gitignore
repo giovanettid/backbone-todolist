@@ -1,8 +1,11 @@
+.idea
+*.log
 node_modules
 dist
 test/temp
 .sass-cache
 app/bower_components
 .tmp
+log.txt
 test/bower_components/
 it/bower_components/
