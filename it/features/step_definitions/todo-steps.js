@@ -1,12 +1,22 @@
 'use strict';
 
-var todo = require("../../page/todoPage.js");
-var expect = require("../../bower_components/chai/chai").expect;
+var main = require("./../../main");
+var todo = main.todo,
+    expect = main.expect;
+
 
 module.exports = function() {
 
     this.Before(function (callback) {
-        todo.before(callback);
+        todo.before().then(function() {
+            callback();
+        });
+    });
+
+    this.After(function (callback) {
+        todo.after().then(function() {
+            callback();
+        });
     });
 
     this.Given(/(\d+) todos dans la liste/, function (nbTodos, callback) {
@@ -22,8 +32,7 @@ module.exports = function() {
     });
 
     this.Then(/le todo "(.*)" est placé en position (\d+) dans la liste/, function (aTodo, position, callback) {
-        expect(todo.nthText(position)).to.equal(aTodo);
-        callback();
+        expect(todo.nthText(position)).to.eventually.equal(aTodo).notify(callback);
     });
 
     this.When(/je supprime le todo placé en position (\d+) dans la liste/, function (position, callback) {
@@ -32,8 +41,7 @@ module.exports = function() {
     });
 
     this.Then(/la liste contient (\d+) todo\(s\)/, function (nbTodos, callback) {
-        expect(todo.nbVisible()).to.equal(parseInt(nbTodos));
-        callback();
+        expect(todo.nbVisible()).to.eventually.have.length(parseInt(nbTodos)).notify(callback);
     });
 
     this.When(/je coche le "(premier|deuxième|troisième)" todo/, function (nth,callback) {
@@ -56,14 +64,12 @@ module.exports = function() {
         callback();
     });
 
-    this.Then(/le "(premier|deuxième|troisième)" todo est fait/, function (nth,callback) {
-        expect(todo.nthCompleted(nthToPosition(nth))).to.be.true;
-        callback();
+    this.Then(/le "(premier|deuxième|troisième)" todo est fait/, function (nth, callback) {
+        expect(todo.nthCompleted(nthToPosition(nth))).to.eventually.be.true.notify(callback);
     });
 
-    this.Then(/le "(premier|deuxième|troisième)" todo est à faire/, function (nth,callback) {
-        expect(todo.nthCompleted(nthToPosition(nth))).to.be.false;
-        callback();
+    this.Then(/le "(premier|deuxième|troisième)" todo est à faire/, function (nth, callback) {
+        expect(todo.nthCompleted(nthToPosition(nth))).to.eventually.be.false.notify(callback);
     });
 
     this.When(/j'édite le "(premier|deuxième|troisième)" todo avec la valeur "(.*)"/, function (nth,valeur,callback) {
