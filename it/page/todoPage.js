@@ -2,8 +2,7 @@
 var config = require('../config');
 var _ = require('../bower_components/underscore/underscore');
 
-var webdriver = require('selenium-webdriver');
-var By = require('selenium-webdriver').By;
+var webdriverio = require('webdriverio');
 
 function TodoPage() {
     'use strict';
@@ -23,12 +22,12 @@ function TodoPage() {
         return nthChild(n) + selector;
     };
 
-    var find = function(selector) {
-        return driver.findElement(By.css(selector));
+    var enterKey = function(selector) {
+        client = client.addValue(selector,'Enter');
     };
 
-    var enterKey = function(selector) {
-        find(selector).sendKeys(webdriver.Key.ENTER);
+    var show = function(filter) {
+        client = client.click('#footer a[href="#/'+filter+'"]');
     };
 
     var nthLabel = _.partial(nthChildAndSelector,' label');
@@ -39,35 +38,34 @@ function TodoPage() {
     var nthHidden = _.partial(nthChildAndSelector,'.hidden');
     var nthNotHidden = _.partial(nthChildAndSelector,':not(.hidden)');
 
-    var driver;
 
-    var capabilities = {
-        chrome: webdriver.Capabilities.chrome(),
-        phantomjs: webdriver.Capabilities.phantomjs()
+    var options = {
+        desiredCapabilities: {
+            browserName: config.browser
+        }
     };
 
+    var client;
+
     this.before = function() {
-        driver = new webdriver.Builder()
-            .withCapabilities(capabilities[config.browser]).build();
-        driver.get(config.url);
-        driver.executeScript('window.localStorage.clear();');
-        return driver.navigate().refresh();
+        client = webdriverio.remote(options);
+        return client.init().url(config.url).execute('window.localStorage.clear();').refresh();
     };
 
     this.after = function() {
-        return driver.quit();
+        return client.end();
     };
 
     this.title = function() {
-        return driver.getTitle();
+        return client.getTitle();
     };
 
     this.titleList = function() {
-        return find(titleList).getText();
+        return client.getText(titleList);
     };
 
     this.typeNew = function(newTodo) {
-        find(idNew).sendKeys(newTodo);
+        client = client.setValue(idNew,newTodo);
         return this;
     };
 
@@ -76,30 +74,32 @@ function TodoPage() {
     };
 
     this.nbVisible = function() {
-        return webdriver.promise.filter(driver.findElements(By.css(childrenVisible)), function(element) {
-                return element.isDisplayed();
-            });
+        return client.isVisible(childrenVisible, function(err,res){
+            return _.filter([].concat(res),function(isTrue) {
+                return isTrue;
+            })
+        });
     };
 
     this.nthText = function(nth) {
-        return find(nthLabel(nth)).getText();
+        return client.getText(nthLabel(nth));
     };
 
     this.mouseOverNth = function(nth) {
-        new webdriver.ActionSequence(driver).mouseMove(find(nthChild(nth))).perform();
+        client = client.moveToObject(nthChild(nth)).moveToObject(nthDestroyBtn(nth));
         return this;
     };
 
     this.deleteNth = function(nth) {
-        find(nthDestroyBtn(nth)).click();
+        client = client.click(nthDestroyBtn(nth));
     };
 
     this.done = function(nth) {
-        find(nthCheckbox(nth)).click();
+        client = client.click(nthCheckbox(nth));
     };
 
     this.doneAll = function() {
-        find(toggleAll).click();
+        client = client.click(toggleAll);
     };
 
     this.undo = function(nth) {
@@ -111,17 +111,15 @@ function TodoPage() {
     };
 
     this.nthCompleted = function(nth) {
-        return driver.findElements(By.css(nthCompleted(nth))).then(function (elements) {
-            return _.isArray(elements) && elements.length === 1;
-        });
+        return client.isVisible(nthCompleted(nth));
     };
 
     this.doubleClickNth = function(nth) {
-        new webdriver.ActionSequence(driver).mouseMove(find(nthLabel(nth))).doubleClick().perform();
+        client = client.moveToObject(nthLabel(nth)).doubleClick(nthLabel(nth));
     };
 
     this.editNth = function(nth,todo) {
-        find(nthInput(nth)).sendKeys(todo);
+        client = client.addValue(nthInput(nth),todo);
         return this;
     };
 
@@ -129,8 +127,10 @@ function TodoPage() {
         enterKey(nthInput(nth));
     };
 
-    this.show = function(label) {
-        driver.findElement(By.linkText(label)).click();
+    this.filter = {
+        all : _.partial(show,''),
+        pending : _.partial(show,'pending'),
+        completed : _.partial(show,'completed')
     };
 
     this.first = _.partial(this.nthText,1);

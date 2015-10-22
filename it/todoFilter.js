@@ -16,19 +16,19 @@ describe('Todo filter scenario', function() {
         todo.typeNew('third todo').enterNew();
         todo.done(2);
 
-        todo.show('show completed');
+        todo.filter.completed();
 
         return expect(todo.nbVisible()).to.eventually.have.length(1);
     });
 
     it('show pending todo',function() {
-        todo.show('show pending');
+        todo.filter.pending();
 
         return expect(todo.nbVisible()).to.eventually.have.length(2);
     });
 
     it('show all todo',function() {
-        todo.show('show all');
+        todo.filter.all();
 
         return expect(todo.nbVisible()).to.eventually.have.length(3);
     });
