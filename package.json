@@ -27,7 +27,7 @@
     "jshint-stylish": "^1.0.0",
     "load-grunt-tasks": "^0.6.0",
     "mocha": "^2.3.0",
-    "selenium-webdriver": "^2.47.0",
+    "selenium-webdriver": "^2.48.2",
     "time-grunt": "^1.0.0"
   },
   "engines": {
