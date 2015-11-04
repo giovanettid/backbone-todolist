@@ -79,6 +79,21 @@ module.exports = function() {
         callback();
     });
 
+    this.When(/je filtre les todos faits/, function (callback) {
+        todo.filter.completed();
+        callback();
+    });
+
+    this.When(/je filtre les todos à faire/, function (callback) {
+        todo.filter.pending();
+        callback();
+    });
+
+    this.When(/je montre tous les todos/, function (callback) {
+        todo.filter.all();
+        callback();
+    });
+
     function nthToPosition(nth) {
         return ['premier','deuxième','troisième'].indexOf(nth)+1
     }
