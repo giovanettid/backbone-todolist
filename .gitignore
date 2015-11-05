@@ -6,3 +6,6 @@ app/bower_components
 .tmp
 test/bower_components/
 it/bower_components/
+.idea
+log.txt
+*.log
