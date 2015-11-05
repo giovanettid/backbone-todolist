@@ -1,6 +1,8 @@
-npm 2.14.2
-node v4.0.0
-phantomjs 1.9.8
+### casperjs it tests avec mocha & chai
+
+* npm 2.14.2
+* node v4.0.0
+* phantomjs 1.9.8
 
 rm -rf node_modules && npm install
 
