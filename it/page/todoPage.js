@@ -38,17 +38,10 @@ function TodoPage() {
     var nthHidden = _.partial(nthChildAndSelector,'.hidden');
     var nthNotHidden = _.partial(nthChildAndSelector,':not(.hidden)');
 
-
-    var options = {
-        desiredCapabilities: {
-            browserName: config.browser
-        }
-    };
-
     var client;
 
     this.before = function() {
-        client = webdriverio.remote(options);
+        client = webdriverio.remote(config.options);
         return client.init().url(config.url).execute('window.localStorage.clear();').refresh();
     };
 
@@ -83,6 +76,14 @@ function TodoPage() {
 
     this.nthText = function(nth) {
         return client.getText(nthLabel(nth));
+    };
+
+    this.waitNth = function(nth, expected) {
+        return client.waitUntil(function() {
+            return this.getText(nthLabel(nth)).then(function(actual) {
+                return actual === expected;
+            });
+        },config.waitTimeout);
     };
 
     this.mouseOverNth = function(nth) {

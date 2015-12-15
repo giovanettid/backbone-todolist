@@ -235,7 +235,7 @@ module.exports = function (grunt) {
             test: {
                 options: {
                     reporter: 'spec',
-                    timeout: 5000
+                    timeout: 10000
                 },
                 src: ['it/todo*.js']
             }
