@@ -1,6 +1,6 @@
 
 var config = require('../config');
-var _ = require('../bower_components/underscore/underscore');
+var _ = require('underscore');
 
 var webdriverio = require('webdriverio');
 

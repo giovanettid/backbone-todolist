@@ -7,13 +7,15 @@ rm -rf node_modules && npm install
 
 rm -rf app/bower_components && bower install
 
-cd it && rm -rf bower_components && bower install && cd ..
-
 grunt serve
 
 java -jar ~/dev/selenium/selenium-server-standalone-2.48.2.jar
 
+#### unit tests
+grunt mochaTest:test
 #### it tests
+grunt mochaTest:it
+#### unit + it tests
 grunt mochaTest
 #### functional tests
 grunt cucumberjs

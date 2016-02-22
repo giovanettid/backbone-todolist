@@ -1,9 +1,4 @@
 
-var main = require("./main");
-var todo = main.todo,
-    expect = main.expect,
-    Q = main.Q;
-
 describe('Todo delete scenario', function() {
 
     before(function() {

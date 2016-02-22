@@ -1,9 +1,6 @@
 'use strict';
 
-var main = require("./../../main");
-var todo = main.todo,
-    expect = main.expect;
-
+require("../../helpers/main");
 
 module.exports = function() {
 

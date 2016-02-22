@@ -2,13 +2,13 @@ define([
     'jquery',
     'backbone',
     'common'
-], function ($, Backbone, Common) {
+], function($, Backbone, Common) {
     'use strict';
 
     var TodoView = Backbone.View.extend({
         tagName: 'li',
 
-        initialize: function () {
+        initialize: function() {
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.remove);
             this.listenTo(this.model, 'visible', this.toggleVisible);
@@ -20,7 +20,7 @@ define([
             'keypress .edit': 'updateOnEnter',
             'blur .edit' : 'close',
             'keydown .edit': 'revertOnEscape',
-            'click .destroy': 'destroyModel'
+            'click .destroy': 'clear'
         },
 
         edit: function() {
@@ -29,13 +29,13 @@ define([
             this.$input.focus();
         },
 
-        updateOnEnter: function (e) {
+        updateOnEnter: function(e) {
             if (e.which === Common.ENTER_KEY) {
                 this.close();
             }
         },
 
-        revertOnEscape: function (e) {
+        revertOnEscape: function(e) {
             if (e.which === Common.ESC_KEY) {
                 this.$el.removeClass('editing');
                 // Also reset the hidden input back to the original value.
@@ -43,41 +43,41 @@ define([
             }
         },
 
-        destroyModel: function(){
+        clear: function() {
             this.model.destroy();
         },
 
         close: function() {
-            if (!this.$el.hasClass('editing')) {
-                return;
-            }
-            var value = this.$input.val().trim();
-            if(value) {
-                this.model.save({title: value});
+            var trimmedValue = this.$input.val().trim();
+            if(trimmedValue) {
+                this.$input.val(trimmedValue);
+                this.model.save({title: trimmedValue});
             }
             this.$el.removeClass('editing');
         },
 
-        toggleVisible: function () {
+        toggleVisible: function() {
             this.$el.toggleClass('hidden', this.isHidden());
         },
 
-        isHidden: function () {
+        isHidden: function() {
             return this.model.get('completed') ?
             Common.TodoFilter === 'pending' :
             Common.TodoFilter === 'completed';
         },
 
-        toggleCompleted: function () {
+        toggleCompleted: function() {
             this.model.toggle();
+            this.model.save({completed: this.model.get('completed')});
         },
 
-        render: function () {
+        render: function() {
             var template =  _.template($('#item-template').html());
             this.$el.html(template(this.model.toJSON()));
             this.$el.toggleClass('completed', this.model.get('completed'));
+            this.toggleVisible();
             this.$input = this.$('.edit');
-            return this; //enable chained calls
+            return this;
         }
     });
 

@@ -1,6 +1,6 @@
 define([
     'backbone'
-], function (Backbone) {
+], function(Backbone) {
     'use strict';
 
     var Todo = Backbone.Model.extend({
@@ -8,10 +8,8 @@ define([
             title: '',
             completed: false
         },
-        toggle: function () {
-            this.save({
-                completed: !this.get('completed')
-            });
+        toggle: function() {
+            this.set('completed',!this.get('completed'));
         }
     });
     return Todo;

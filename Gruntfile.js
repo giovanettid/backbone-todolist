@@ -235,7 +235,16 @@ module.exports = function (grunt) {
             test: {
                 options: {
                     reporter: 'spec',
-                    timeout: 10000
+                    timeout: 1000,
+                    require: 'test/spec/helpers/main.js'
+                },
+                src: ['test/spec/*.js']
+            },
+            it: {
+                options: {
+                    reporter: 'spec',
+                    timeout: 10000,
+                    require: 'it/helpers/main.js'
                 },
                 src: ['it/todo*.js']
             }
@@ -243,7 +252,7 @@ module.exports = function (grunt) {
         cucumberjs: {
             src: 'it/features',
             options: {
-                steps: "it/features/step_definitions"
+                steps: 'it/features/step_definitions'
             }
         }
     });
@@ -290,7 +299,7 @@ module.exports = function (grunt) {
                 'createDefaultTemplate',
                 'jst',
                 'connect:test',
-                'mocha',
+                'mochaTest'
             ];
 
         if(!isConnected) {

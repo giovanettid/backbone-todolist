@@ -37,7 +37,7 @@ require([
     'backbone',
     'views/appView',
     'routers/appRouter'
-], function (Backbone, AppView, TodoRouter) {
+], function(Backbone, AppView, TodoRouter) {
     'use strict';
 
     new TodoRouter();

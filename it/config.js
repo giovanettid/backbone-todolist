@@ -6,10 +6,16 @@ config.waitTimeout = 2000;
 config.browser = 'chrome';
 //config.browser = 'phantomjs';
 
-//config.url = 'http://localhost:9000';
-config.url = 'http://192.168.99.100:9000';
+config.url = 'http://localhost:9000';
+//config.url = 'http://192.168.99.100:9000';
 
 var options = {};
+
+options.local = {
+    desiredCapabilities: {
+        browserName: config.browser
+    }
+};
 
 options.docker = {
     desiredCapabilities: {
@@ -50,6 +56,7 @@ options.saucelabs = {
     key: '<key>'
 };
 
-config.options = options.docker;
+//config.options = options.docker;
+config.options = options.local;
 
 module.exports = config;
