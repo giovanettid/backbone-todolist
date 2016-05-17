@@ -1,11 +1,12 @@
 
-describe('Todo delete scenario', function() {
+describe('Todo delete scenario', function () {
+    'use strict';
 
-    before(function() {
+    before(function () {
         return todo.before();
     });
 
-    it('ajout deux todo dans la todo list et suppression second todo',function() {
+    it('ajout deux todo dans la todo list et suppression second todo', function () {
         todo.typeNew('first todo').enterNew();
         todo.typeNew('second todo').enterNew();
         todo.mouseOverNth(2).deleteNth(2);
@@ -17,14 +18,14 @@ describe('Todo delete scenario', function() {
 
     });
 
-    it('suppression du seul todo restant',function() {
+    it('suppression du seul todo restant', function () {
         todo.mouseOverFirst();
         todo.deleteFirst();
 
         return expect(todo.nbVisible()).to.eventually.be.empty;
     });
 
-    after(function() {
+    after(function () {
         return todo.after();
     });
 

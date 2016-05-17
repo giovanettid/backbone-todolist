@@ -107,19 +107,10 @@ module.exports = function (grunt) {
         },
         clean: {
             dist: ['.tmp', '<%= yeoman.dist %>/*'],
-            server: '.tmp'
-        },
-        jshint: {
-            options: {
-                jshintrc: '.jshintrc',
-                reporter: require('jshint-stylish')
-            },
-            all: [
-                'Gruntfile.js',
-                '<%= yeoman.app %>/scripts/{,*/}*.js',
-                '!<%= yeoman.app %>/scripts/vendor/*',
-                'test/spec/{,*/}*.js'
-            ]
+            server: '.tmp',
+            coverage: {
+                src: ['test/coverage/']
+            }
         },
         mocha: {
             all: {
@@ -254,6 +245,38 @@ module.exports = function (grunt) {
             options: {
                 steps: 'it/features/step_definitions'
             }
+        },
+        eslint: {
+            options: {
+                format: 'html',
+                outputFile: 'reports/eslint-report.html'
+            },
+            target: 'app/scripts/**/*.js'
+        },
+        env: {
+            coverage: {
+                APP_DIR_FOR_CODE_COVERAGE: 'coverage/instrument/app/scripts/'
+            }
+        },
+        instrument: {
+            files: 'app/scripts/**/*.js',
+            options: {
+                lazy: true,
+                basePath: 'test/coverage/instrument/'
+            }
+        },
+        storeCoverage: {
+            options: {
+                dir: 'test/coverage/reports'
+            }
+        },
+        makeReport: {
+            src: 'test/coverage/reports/**/*.json',
+            options: {
+                type: 'lcov',
+                dir: 'test/coverage/reports',
+                print: 'detail'
+            }
         }
     });
 
@@ -327,12 +350,23 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('default', [
-        'jshint',
+        'eslint',
         'test',
         'build'
     ]);
 
+    grunt.registerTask('coverage', [
+        'env:coverage',
+        'clean:coverage',
+        'instrument',
+        'mochaTest:test',
+        'storeCoverage',
+        'makeReport']);
+
     grunt.loadNpmTasks('grunt-bower-requirejs');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-cucumber');
+    grunt.loadNpmTasks('grunt-eslint');
+    grunt.loadNpmTasks('grunt-istanbul');
+    grunt.loadNpmTasks('grunt-env');
 };

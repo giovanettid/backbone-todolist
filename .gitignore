@@ -1,11 +1,15 @@
 .idea
 *.log
+*.pm
+*.html
 node_modules
 dist
+out
 test/temp
 .sass-cache
 app/bower_components
 .tmp
 log.txt
 test/bower_components/
+test/coverage
 it/bower_components/

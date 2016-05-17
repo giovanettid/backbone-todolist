@@ -1,16 +1,19 @@
 define([
-    'jquery',
     'backbone',
     'collections/todos',
     'views/todoView',
     'common'
-], function($, Backbone, Todos, TodoView, Common) {
+], function (Backbone, Todos, TodoView, Common) {
     'use strict';
 
     var AppView = Backbone.View.extend({
-        el: '#todoapp',
 
-        initialize : function() {
+        events: {
+            'keypress #new-todo': 'createToDoEnter',
+            'click #toggle-all' : 'toggleAllComplete'
+        },
+
+        initialize : function () {
             this.$input = this.$('#new-todo');
 
             this.listenTo(Todos, 'add', this.addOne);
@@ -21,13 +24,10 @@ define([
             Todos.fetch();
         },
 
-        events: {
-            'keypress #new-todo': 'createToDoEnter',
-            'click #toggle-all' : 'toggleAllComplete'
-        },
+        el: '#todoapp',
 
-        createToDoEnter: function(e) {
-            if(e.which !== Common.ENTER_KEY || !this.$input.val().trim()) {
+        createToDoEnter: function (e) {
+            if (e.which !== Common.ENTER_KEY || !this.$input.val().trim()) {
                 return;
             }
 
@@ -35,39 +35,39 @@ define([
             this.$input.val('');
         },
 
-        addOne: function(todo){
+        addOne: function (todo) {
             var view = new TodoView({model: todo});
-            $('#todo-list').append(view.render().el);
+            this.$('#todo-list').append(view.render().el);
 
         },
 
-        addAll: function() {
+        addAll: function () {
             this.$('#todo-list').html('');
             Todos.each(this.addOne, this);
         },
 
-        filterOne: function(todo) {
+        filterOne: function (todo) {
             todo.trigger('visible');
         },
 
-        filterAll: function() {
+        filterAll: function () {
             Todos.each(this.filterOne, this);
         },
 
-        toggleAllComplete: function() {
+        toggleAllComplete: function () {
             var completed = this.allCheckbox.checked;
-            Todos.each(function(todo) {
+            Todos.each(function (todo) {
                 todo.save({
                     completed: completed
                 });
             });
         },
 
-        newAttributes: function() {
+        newAttributes: function () {
             return {
                 title: this.$input.val().trim(),
                 completed: false
-            }
+            };
         }
     });
 

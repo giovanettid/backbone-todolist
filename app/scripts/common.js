@@ -1,6 +1,5 @@
-'use strict';
-
-define([], function() {
+define([], function () {
+    'use strict';
     return {
         // Which filter are we using?
         TodoFilter: '', // empty, active, completed

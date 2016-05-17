@@ -7,12 +7,18 @@ global.sinon = sinon;
 global.expect = chai.expect;
 
 var jsdom = require('jsdom');
-var fs = require("fs");
+var fs = require('fs');
 var markup = fs.readFileSync('app/index.html');
 
 global.window = jsdom.jsdom(markup).defaultView;
 
-global.requirejs = require('requirejs');
+var requirejs = require('requirejs');
+global.requirejs = requirejs;
+
+var require_helper = function (path) {
+    'use strict';
+    return (process.env.APP_DIR_FOR_CODE_COVERAGE || '../app/scripts/') + path;
+};
 
 requirejs.config({
     baseUrl: 'test',
@@ -23,15 +29,20 @@ requirejs.config({
         jquery: '../node_modules/jquery/dist/jquery',
         underscore: '../app/bower_components/underscore/underscore',
         backbone: '../app/bower_components/backbone/backbone',
-        'common': '../app/scripts/common',
-        'models/todo': '../app/scripts/models/todo',
-        'collections/todos': '../app/scripts/collections/todos',
-        'views/todoView': '../app/scripts/views/todoView',
-        'views/appView': '../app/scripts/views/appView'
+        'common': require_helper('common'),
+        'models/todo': require_helper('models/todo'),
+        'collections/todos': require_helper('collections/todos'),
+        'views/todoView': require_helper('views/todoView'),
+        'views/appView': require_helper('views/appView')
     }
 });
 
 requirejs.define(
-    'storageMock', function() {
+    'storageMock',
+    function () {
+        'use strict';
         return null;
-    });
+    }
+);
+
+

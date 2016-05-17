@@ -1,11 +1,12 @@
 
-describe('Todo done scenario', function() {
+describe('Todo done scenario', function () {
+    'use strict';
 
     before(function () {
         return todo.before();
     });
 
-    it('ajout trois todo dans la todo list et cocher deux premier todo done',function() {
+    it('ajout trois todo dans la todo list et cocher deux premier todo done', function () {
         todo.typeNew('first todo').enterNew();
         todo.typeNew('second todo').enterNew();
         todo.typeNew('third todo').enterNew();
@@ -20,7 +21,7 @@ describe('Todo done scenario', function() {
         ]);
     });
 
-    it('decocher deuxieme todo',function() {
+    it('decocher deuxieme todo', function () {
         todo.undo(2);
 
         return Q.all([
@@ -31,7 +32,7 @@ describe('Todo done scenario', function() {
         ]);
     });
 
-    it('cocher tous les todos',function() {
+    it('cocher tous les todos', function () {
         todo.doneAll();
 
         return Q.all([
@@ -42,7 +43,7 @@ describe('Todo done scenario', function() {
         ]);
     });
 
-    it('decocher tous les todos',function() {
+    it('decocher tous les todos', function () {
         todo.undoAll();
 
         return Q.all([
@@ -53,7 +54,7 @@ describe('Todo done scenario', function() {
         ]);
     });
 
-    after(function() {
+    after(function () {
         return todo.after();
     });
 

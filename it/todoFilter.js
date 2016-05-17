@@ -1,11 +1,12 @@
 
 describe('Todo filter scenario', function() {
+    'use strict';
 
     before(function () {
         return todo.before();
     });
 
-    it('show completed todo',function() {
+    it('show completed todo', function () {
         todo.typeNew('first todo').enterNew();
         todo.typeNew('second todo').enterNew();
         todo.typeNew('third todo').enterNew();
@@ -16,19 +17,19 @@ describe('Todo filter scenario', function() {
         return expect(todo.nbVisible()).to.eventually.have.length(1);
     });
 
-    it('show pending todo',function() {
+    it('show pending todo', function () {
         todo.filter.pending();
 
         return expect(todo.nbVisible()).to.eventually.have.length(2);
     });
 
-    it('show all todo',function() {
+    it('show all todo', function () {
         todo.filter.all();
 
         return expect(todo.nbVisible()).to.eventually.have.length(3);
     });
 
-    after(function() {
+    after(function () {
         return todo.after();
     });
 

@@ -1,6 +1,6 @@
 define([
     'backboneLocalstorage'
-], function(Store) {
+], function (Store) {
     'use strict';
-    return new Store("todos-backbone");
+    return new Store('todos-backbone');
 });

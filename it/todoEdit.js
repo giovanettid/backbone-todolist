@@ -1,11 +1,12 @@
 
-describe('Todo edit scenario', function() {
+describe('Todo edit scenario', function () {
+    'use strict';
 
     before(function () {
         return todo.before();
     });
 
-    it("edition d'un todo",function() {
+    it("edition d'un todo", function () {
         todo.typeNew('first todo').enterNew();
         todo.typeNew('second todo').enterNew();
 
@@ -19,7 +20,7 @@ describe('Todo edit scenario', function() {
 
     });
 
-    after(function() {
+    after(function () {
         return todo.after();
     });
 
