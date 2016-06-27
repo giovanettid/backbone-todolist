@@ -18,4 +18,29 @@ describe('Todo', function () {
 
         expect(todo.get('completed')).to.be.true;
     });
+
+    describe('match filter', function () {
+        var tests = [
+            {filter: 'completed', completed: false, match: false},
+            {filter: 'completed', completed: true, match: true},
+            {filter: 'pending', completed: false, match: true},
+            {filter: 'pending', completed: true, match: false},
+            {filter: '', completed: false, match: true},
+            {filter: '', completed: true, match: true}
+        ];
+
+        tests.forEach(function (test) {
+            it('when filter '
+                + (test.filter === '' ? 'empty' : test.filter)
+                + ' and todo '
+                + (test.completed ? '' : 'not ')
+                + 'completed then '
+                + (test.match ? '' : 'not ')
+                + 'match', function () {
+                    todo.set('completed', test.completed);
+
+                    expect(todo.matchesFilter(test.filter)).to.equal(test.match);
+                });
+        });
+    });
 });

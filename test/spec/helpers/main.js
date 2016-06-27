@@ -29,11 +29,17 @@ requirejs.config({
         jquery: '../node_modules/jquery/dist/jquery',
         underscore: '../app/bower_components/underscore/underscore',
         backbone: '../app/bower_components/backbone/backbone',
+        'backbone.radio': '../app/bower_components/backbone.radio/build/backbone.radio',
+        marionette: '../app/bower_components/marionette/lib/backbone.marionette',
         'common': require_helper('common'),
         'models/todo': require_helper('models/todo'),
         'collections/todos': require_helper('collections/todos'),
+        'events/filterChannel': require_helper('events/filterChannel'),
         'views/todoView': require_helper('views/todoView'),
-        'views/appView': require_helper('views/appView')
+        'views/headerView': require_helper('views/headerView'),
+        'views/listView': require_helper('views/listView'),
+        'views/footerView': require_helper('views/footerView'),
+        'views/layoutView': require_helper('views/layoutView')
     }
 });
 

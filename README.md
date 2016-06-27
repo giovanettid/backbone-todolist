@@ -9,7 +9,7 @@ rm -rf app/bower_components && bower install
 
 grunt serve
 
-java -jar ~/dev/selenium/selenium-server-standalone-2.48.2.jar
+java -jar ~/dev/selenium/selenium-server-standalone-2.53.0.jar
 
 #### unit tests
 grunt mochaTest:test

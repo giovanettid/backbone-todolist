@@ -9,11 +9,11 @@ describe('TodoView', function () {
 
     beforeEach(function () {
         todo = new Todo();
-        todoView = new TodoView({model:todo});
+        todoView = new TodoView({model: todo});
     });
 
     afterEach(function () {
-        todoView.remove();
+        todoView.destroy();
     });
 
     it('tagName should equal li', function () {
@@ -25,32 +25,23 @@ describe('TodoView', function () {
 
         view.render();
 
-        expect(view.$input.val()).to.equal('todo1');
+        expect(view.ui.edit.val()).to.equal('todo1');
         expect(view.$el.hasClass('completed')).to.be.true;
     });
 
-    describe('listeners', function () {
+    describe('model events', function () {
         it('when model title change then render view', function () {
             todo.set('title', 'title updated');
 
-            expect(todoView.$input.val()).to.equal('title updated');
+            expect(todoView.ui.edit.val()).to.equal('title updated');
         });
 
         it('when model destroy then remove view', function () {
             var spy = sinon.spy(todoView, 'remove');
-            todoView.initialize();
 
             todo.destroy();
 
             expect(spy).have.been.called;
-        });
-
-        it('when model trigger visible then view has class hidden', function () {
-            Common.TodoFilter = 'completed';
-
-            todo.trigger('visible');
-
-            expect(todoView.$el.hasClass('hidden')).to.be.true;
         });
     });
 
@@ -60,12 +51,11 @@ describe('TodoView', function () {
             var e = $.Event(eventName);
             e.which = keyCode;
             return e;
-        };
-
-        var setupOnEditModeWithValue = function (val) {
-            todo.set('title', val);
-            todoView.$el.find('label').dblclick();
-        };
+        },
+            setupOnEditModeWithValue = function (val) {
+                todo.set('title', val);
+                todoView.$el.find('label').dblclick();
+            };
 
         describe('when click', function () {
 
@@ -111,7 +101,7 @@ describe('TodoView', function () {
                 expect(spy).have.callCount(1);
             });
 
-            describe('but not save', function() {
+            describe('but not save', function () {
                 var spy;
 
                 beforeEach(function () {
@@ -148,7 +138,7 @@ describe('TodoView', function () {
             var spy = sinon.stub(todo, 'save');
             setupOnEditModeWithValue('todo1');
 
-            todoView.$input.focusout();
+            todoView.ui.edit.focusout();
 
             expect(todoView.$el.hasClass('editing')).to.be.false;
             expect(spy).have.callCount(1);
@@ -157,47 +147,24 @@ describe('TodoView', function () {
         describe('when keydown class edit', function () {
             beforeEach(function () {
                 setupOnEditModeWithValue('todo1');
-                todoView.$input.val('todo1 updated');
+                todoView.ui.edit.val('todo1 updated');
             });
 
             it('on escape key then revert title', function () {
                 todoView.$el.find('.edit').trigger(createEvent('keydown', Common.ESC_KEY));
 
-                expect(todoView.$input.val()).to.equal('todo1');
+                expect(todoView.ui.edit.val()).to.equal('todo1');
                 expect(todoView.$el.hasClass('editing')).to.be.false;
             });
 
             it('but no escape key fire no changes', function () {
                 todoView.$el.find('.edit').trigger(createEvent('keydown', 65));
 
-                expect(todoView.$input.val()).to.equal('todo1 updated');
+                expect(todoView.ui.edit.val()).to.equal('todo1 updated');
                 expect(todoView.$el.hasClass('editing')).to.be.true;
             });
         });
 
     });
 
-    describe('is hidden', function () {
-        var tests = [
-            {filter: 'completed', completed: false, hidden: true},
-            {filter: 'completed', completed: true, hidden: false},
-            {filter: 'pending', completed: false, hidden: false},
-            {filter: 'pending', completed: true, hidden: true},
-            {filter: '', completed: false, hidden: false},
-            {filter: '', completed: true, hidden: false}
-        ];
-
-        tests.forEach(function (test) {
-            it('when filter '
-                + (test.filter === '' ? 'empty' : test.filter)
-                + ' and todo '
-                + (test.completed ? '' : 'not ')
-                + 'completed then hidden ' + test.hidden, function () {
-                    Common.TodoFilter = test.filter;
-                    todo.set('completed', test.completed);
-
-                    expect(todoView.isHidden()).to.equal(test.hidden);
-                });
-        });
-    });
 });

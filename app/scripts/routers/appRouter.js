@@ -1,19 +1,21 @@
 define([
-    'backbone',
-    'collections/todos',
-    'common'
-], function (Backbone, Todos, Common) {
+    'marionette',
+    'events/filterChannel'
+], function (Marionette, filterChannel) {
     'use strict';
 
-    var TodoRouter = Backbone.Router.extend({
-        routes: {
-            "*filter": 'setFilter'
-        },
+    var TodoController = Marionette.Object.extend({
         setFilter: function (params) {
-            Common.TodoFilter = params || '';
-            Todos.trigger('filter');
+            filterChannel.request('filterState').set('filter', params || '');
         }
-    });
+    }),
+        todoController = new TodoController(),
+        AppRouter = Marionette.AppRouter.extend({
+            controller: todoController,
+            appRoutes: {
+                "*filter": "setFilter"
+            }
+        });
 
-    return TodoRouter;
+    return AppRouter;
 });

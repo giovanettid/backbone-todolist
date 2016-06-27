@@ -1,32 +1,37 @@
 define([
-    'jquery',
-    'backbone',
+    'marionette',
     'common'
-], function ($, Backbone, Common) {
+], function (Marionette, Common) {
     'use strict';
 
-    var TodoView = Backbone.View.extend({
+    var TodoView = Marionette.ItemView.extend({
+
         tagName: 'li',
+        template: '#item-template',
 
-        events: {
-            'dblclick label': 'edit',
-            'click .toggle': 'toggleCompleted',
-            'keypress .edit': 'updateOnEnter',
-            'blur .edit' : 'close',
-            'keydown .edit': 'revertOnEscape',
-            'click .destroy': 'clear'
+        ui: {
+            edit: '.edit',
+            destroy: '.destroy',
+            label: 'label',
+            toggle: '.toggle'
         },
-
-        initialize: function () {
-            this.listenTo(this.model, 'change', this.render);
-            this.listenTo(this.model, 'destroy', this.remove);
-            this.listenTo(this.model, 'visible', this.toggleVisible);
+        events: {
+            'dblclick @ui.label': 'edit',
+            'click @ui.toggle': 'toggleCompleted',
+            'keypress @ui.edit': 'updateOnEnter',
+            'blur @ui.edit' : 'close',
+            'keydown @ui.edit': 'revertOnEscape',
+            'click @ui.destroy': 'clear'
+        },
+        modelEvents: {
+            change: 'render',
+            destroy: 'destroy'
         },
 
         edit: function () {
             this.$el.addClass('editing');
-            this.$input.val(this.model.get('title'));
-            this.$input.focus();
+            this.ui.edit.val(this.model.get('title'));
+            this.ui.edit.focus();
         },
 
         updateOnEnter: function (e) {
@@ -39,7 +44,7 @@ define([
             if (e.which === Common.ESC_KEY) {
                 this.$el.removeClass('editing');
                 // Also reset the hidden input back to the original value.
-                this.$input.val(this.model.get('title'));
+                this.ui.edit.val(this.model.get('title'));
             }
         },
 
@@ -48,22 +53,12 @@ define([
         },
 
         close: function () {
-            var trimmedValue = this.$input.val().trim();
+            var trimmedValue = this.ui.edit.val().trim();
             if (trimmedValue) {
-                this.$input.val(trimmedValue);
+                this.ui.edit.val(trimmedValue);
                 this.model.save({title: trimmedValue});
             }
             this.$el.removeClass('editing');
-        },
-
-        toggleVisible: function () {
-            this.$el.toggleClass('hidden', this.isHidden());
-        },
-
-        isHidden: function () {
-            return this.model.get('completed') ?
-                      Common.TodoFilter === 'pending' :
-                      Common.TodoFilter === 'completed';
         },
 
         toggleCompleted: function () {
@@ -71,14 +66,10 @@ define([
             this.model.save({completed: this.model.get('completed')});
         },
 
-        render: function () {
-            var template =  _.template($('#item-template').html());
-            this.$el.html(template(this.model.toJSON()));
+        onRender: function () {
             this.$el.toggleClass('completed', this.model.get('completed'));
-            this.toggleVisible();
-            this.$input = this.$('.edit');
-            return this;
         }
+
     });
 
     return TodoView;

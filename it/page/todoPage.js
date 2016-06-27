@@ -7,10 +7,8 @@ function TodoPage() {
     'use strict';
 
     var idNew = '#new-todo',
-        title = 'title',
-        titleList = '#header > h1',
+        titleList = '#header h1',
         children = '#todo-list li',
-        childrenVisible = '#todo-list li:not(.hidden)',
         toggleAll = '#toggle-all';
 
     var nthChild = function (n) {
@@ -21,6 +19,10 @@ function TodoPage() {
         return nthChild(n) + selector;
     };
 
+    var filterSelector = function (filter) {
+        return '#footer a[href="#/' + filter + '"]';
+    };
+
     var client;
 
     var enterKey = function (selector) {
@@ -28,20 +30,19 @@ function TodoPage() {
     };
 
     var show = function (filter) {
-        client = client.click('#footer a[href="#/' + filter + '"]');
+        client = client.click(filterSelector(filter));
     };
 
     var nthLabel = _.partial(nthChildAndSelector, ' label'),
         nthInput = _.partial(nthChildAndSelector, ' input.edit'),
         nthDestroyBtn = _.partial(nthChildAndSelector, ' button.destroy'),
         nthCheckbox = _.partial(nthChildAndSelector, ' input.toggle'),
-        nthCompleted = _.partial(nthChildAndSelector, '.completed'),
-        nthHidden = _.partial(nthChildAndSelector, '.hidden'),
-        nthNotHidden = _.partial(nthChildAndSelector, ':not(.hidden)');
+        nthCompleted = _.partial(nthChildAndSelector, '.completed');
 
     this.before = function () {
         client = webdriverio.remote(config.options);
-        return client.init().url(config.url).execute('window.localStorage.clear();').refresh();
+        return client.init().url(config.url).execute('window.localStorage.clear();').refresh()
+            .waitForVisible(filterSelector('completed'));
     };
 
     this.after = function () {
@@ -66,7 +67,7 @@ function TodoPage() {
     };
 
     this.nbVisible = function () {
-        return client.isVisible(childrenVisible, function (err, res) {
+        return client.isVisible(children, function (err, res) {
             return _.filter([].concat(res), function (isTrue) {
                 return isTrue;
             });

@@ -16,27 +16,23 @@
 <![endif]-->
 
 <section id="todoapp">
-    <header id="header">
-        <h1>todos</h1>
-        <input id="new-todo" placeholder="What needs to be done?" autofocus>
-    </header>
-    <section id="main">
-        <input id="toggle-all" type="checkbox">
-        <label for="toggle-all">Mark all as complete</label>
-        <ul id="todo-list"></ul>
-    </section>
-    <footer id="footer">
-        <div>
-            <a href="#/">show all</a> |
-            <a href="#/pending">show pending</a> |
-            <a href="#/completed">show completed</a>
-        </div>
-    </footer>
+    <header id="header"></header>
+    <section id="main"></section>
+    <footer id="footer"></footer>
 </section>
 <footer id="info">
     <p>Double-click to edit a todo</p>
 </footer>
 <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
+<script type="text/template" id="header-template">
+    <h1>todos</h1>
+    <input id="new-todo" placeholder="What needs to be done?" autofocus>
+</script>
+<script type="text/template" id="main-template">
+    <input id="toggle-all" type="checkbox">
+    <label for="toggle-all">Mark all as complete</label>
+    <ul id="todo-list"></ul>
+</script>
 <script type="text/template" id="item-template">
     <div class="view">
         <input class="toggle" type="checkbox" <%= completed ? 'checked' : '' %>>
@@ -45,6 +41,12 @@
     <input class="edit" value="<%- title %>">
     <button class="destroy"></button>
 </script>
-<!-- endbuild -->
+<script type="text/template" id="footer-template">
+    <div>
+        <a href="#/">show all</a> |
+        <a href="#/pending">show pending</a> |
+        <a href="#/completed">show completed</a>
+    </div>
+</script>
 </body>
 </html>

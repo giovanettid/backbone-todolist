@@ -7,18 +7,7 @@ define([
 
     var Todos = Backbone.Collection.extend({
         model: Todo,
-        localStorage: Store,
-
-        completed: function () {
-            return this.filter(function (todo) {
-                return todo.get('completed');
-            });
-        },
-
-        remaining: function () {
-            return this.without.apply(this, this.completed());
-        }
-
+        localStorage: Store
     });
 
     return new Todos();

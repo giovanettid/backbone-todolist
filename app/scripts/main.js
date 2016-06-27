@@ -19,6 +19,8 @@ require.config({
     },
     paths: {
         backbone: '../bower_components/backbone/backbone',
+        'backbone.radio': '../bower_components/backbone.radio/build/backbone.radio',
+        marionette: '../bower_components/marionette/lib/backbone.marionette',
         backboneLocalstorage: '../bower_components/backbone.localstorage/backbone.localStorage',
         lodash: '../bower_components/lodash/dist/lodash.compat',
         modernizr: '../bower_components/modernizr/modernizr',
@@ -35,13 +37,27 @@ require.config({
 
 require([
     'backbone',
-    'views/appView',
+    'marionette',
+    'views/layoutView',
+    'views/headerView',
+    'views/listView',
+    'views/footerView',
     'routers/appRouter'
-], function (Backbone, AppView, TodoRouter) {
+], function (Backbone, Marionette, layoutView, headerView, listView, footerView, AppRouter) {
     'use strict';
 
-    new TodoRouter();
-    Backbone.history.start();
-    new AppView();
+    var TodoApp = Marionette.Application.extend({}),
+        App = new TodoApp();
+
+    App.on('start', function () {
+        new AppRouter();
+        Backbone.history.start();
+
+        layoutView.showChildView('header', headerView);
+        layoutView.showChildView('main', listView);
+        layoutView.showChildView('footer', footerView);
+    });
+
+    App.start();
 });
 
