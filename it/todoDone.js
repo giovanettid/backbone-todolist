@@ -2,9 +2,7 @@
 describe('Todo done scenario', function () {
     'use strict';
 
-    before(function () {
-        return todo.before();
-    });
+    before(() => todo.before());
 
     it('ajout trois todo dans la todo list et cocher deux premier todo done', function () {
         todo.typeNew('first todo').enterNew();
@@ -54,9 +52,7 @@ describe('Todo done scenario', function () {
         ]);
     });
 
-    after(function () {
-        return todo.after();
-    });
+    after(() => todo.after());
 
 });
 

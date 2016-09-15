@@ -1,12 +1,10 @@
 
 describe('Todo', function () {
     'use strict';
-    var Todo = requirejs('models/todo'),
-        todo;
+    const Todo = requirejs('models/todo');
+    let todo;
 
-    beforeEach(function () {
-        todo = new Todo();
-    });
+    beforeEach(() => todo = new Todo());
 
     it('defaults are empty title and not completed', function () {
         expect(todo.get('title')).to.be.a('string').and.to.be.empty;
@@ -20,7 +18,7 @@ describe('Todo', function () {
     });
 
     describe('match filter', function () {
-        var tests = [
+        const tests = [
             {filter: 'completed', completed: false, match: false},
             {filter: 'completed', completed: true, match: true},
             {filter: 'pending', completed: false, match: true},
@@ -30,13 +28,8 @@ describe('Todo', function () {
         ];
 
         tests.forEach(function (test) {
-            it('when filter '
-                + (test.filter === '' ? 'empty' : test.filter)
-                + ' and todo '
-                + (test.completed ? '' : 'not ')
-                + 'completed then '
-                + (test.match ? '' : 'not ')
-                + 'match', function () {
+            it(`when filter ${test.filter === '' ? 'empty' : test.filter} and todo ${test.completed ? '' : 'not '}completed then ${test.match ? '' : 'not '}match`,
+                function () {
                     todo.set('completed', test.completed);
 
                     expect(todo.matchesFilter(test.filter)).to.equal(test.match);

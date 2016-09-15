@@ -1,10 +1,10 @@
 describe('TodoView', function () {
     'use strict';
-    var Todo = requirejs('models/todo'),
+    const Todo = requirejs('models/todo'),
         TodoView = requirejs('views/todoView'),
         Common = requirejs('common'),
-        $ = requirejs('jquery'),
-        todo,
+        $ = requirejs('jquery');
+    let todo,
         todoView;
 
     beforeEach(function () {
@@ -12,16 +12,12 @@ describe('TodoView', function () {
         todoView = new TodoView({model: todo});
     });
 
-    afterEach(function () {
-        todoView.destroy();
-    });
+    afterEach(() => todoView.destroy());
 
-    it('tagName should equal li', function () {
-        expect(todoView.tagName).to.equal('li');
-    });
+    it('tagName should equal li', () => expect(todoView.tagName).to.equal('li'));
 
     it('render view', function () {
-        var view = new TodoView({model: new Todo({title: 'todo1', completed: true})});
+        const view = new TodoView({model: new Todo({title: 'todo1', completed: true})});
 
         view.render();
 
@@ -37,7 +33,7 @@ describe('TodoView', function () {
         });
 
         it('when model destroy then remove view', function () {
-            var spy = sinon.spy(todoView, 'remove');
+            const spy = sinon.spy(todoView, 'remove');
 
             todo.destroy();
 
@@ -48,7 +44,7 @@ describe('TodoView', function () {
     describe('events', function () {
 
         var createEvent = function (eventName, keyCode) {
-            var e = $.Event(eventName);
+            const e = $.Event(eventName);
             e.which = keyCode;
             return e;
         },
@@ -59,12 +55,10 @@ describe('TodoView', function () {
 
         describe('when click', function () {
 
-            beforeEach(function () {
-                todoView.render();
-            });
+            beforeEach(() => todoView.render());
 
             it('class toggle then model completed', function () {
-                var spy = sinon.stub(todo, 'save');
+                const spy = sinon.stub(todo, 'save');
 
                 todoView.$el.find('.toggle').click();
 
@@ -73,7 +67,7 @@ describe('TodoView', function () {
             });
 
             it('class destroy then destroy model', function () {
-                var spy = sinon.spy(todo, 'destroy');
+                const spy = sinon.spy(todo, 'destroy');
 
                 todoView.$el.find('.destroy').click();
 
@@ -92,7 +86,7 @@ describe('TodoView', function () {
 
         describe('when keypress class edit', function () {
             it('on enter then save', function () {
-                var spy = sinon.stub(todo, 'save');
+                const spy = sinon.stub(todo, 'save');
                 setupOnEditModeWithValue('todo1');
 
                 todoView.$el.find('.edit').trigger(createEvent('keypress', Common.ENTER_KEY));
@@ -102,11 +96,9 @@ describe('TodoView', function () {
             });
 
             describe('but not save', function () {
-                var spy;
+                let spy;
 
-                beforeEach(function () {
-                    spy = sinon.spy(todo, 'save');
-                });
+                beforeEach(() => spy = sinon.spy(todo, 'save'));
 
                 [{value: '', description: 'empty'},
                     {value: ' ', description: 'with space'}]
@@ -128,14 +120,12 @@ describe('TodoView', function () {
                     expect(todoView.$el.hasClass('editing')).to.be.true;
                 });
 
-                afterEach(function () {
-                    expect(spy).have.callCount(0);
-                });
+                afterEach(() => expect(spy).have.callCount(0));
             });
         });
 
         it('when blur class edit then save', function () {
-            var spy = sinon.stub(todo, 'save');
+            const spy = sinon.stub(todo, 'save');
             setupOnEditModeWithValue('todo1');
 
             todoView.ui.edit.focusout();

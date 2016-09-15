@@ -2,17 +2,11 @@
 describe('Todo add scenario', function () {
     'use strict';
 
-    before(function () {
-        return todo.before();
-    });
+    before(() => todo.before());
 
-    it('titre de la page', function () {
-        return expect(todo.title()).to.eventually.equal('TodoListWithBB');
-    });
+    it('titre de la page', () => expect(todo.title()).to.eventually.equal('TodoListWithBB'));
 
-    it('titre de la todo list', function () {
-        return expect(todo.titleList()).to.eventually.equal('todos');
-    });
+    it('titre de la todo list', () => expect(todo.titleList()).to.eventually.equal('todos'));
 
     it('ajout premier dans la todo list', function () {
         todo.typeNew('first todo').enterNew();
@@ -29,7 +23,5 @@ describe('Todo add scenario', function () {
         ]);
     });
 
-    after(function () {
-        return todo.after();
-    });
+    after(() => todo.after());
 });

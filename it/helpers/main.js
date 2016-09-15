@@ -1,8 +1,8 @@
 
 global.todo = require('../page/todoPage');
 
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 
 global.Q = require('q');

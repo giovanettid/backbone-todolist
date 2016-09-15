@@ -1,43 +1,31 @@
 describe('headerView', function () {
     'use strict';
-    var todos = requirejs('collections/todos'),
+    const todos = requirejs('collections/todos'),
         headerView = requirejs('views/headerView'),
         Common = requirejs('common'),
         $ = requirejs('jquery');
 
-    before(function () {
-        headerView.render();
-    });
+    before(() => headerView.render());
 
-    beforeEach(function () {
-        todos.reset();
-    });
+    beforeEach(() => todos.reset());
 
-    after(function () {
-        headerView.remove();
-    });
+    after(() => headerView.remove());
 
     describe('events', function () {
         describe('when keypress id new-todo', function () {
 
-            var spyCreate,
-                createEvent = function (eventName, keyCode) {
-                    var e = $.Event(eventName);
-                    e.which = keyCode;
-                    return e;
-                };
+            const createEvent = function (eventName, keyCode) {
+                const e = $.Event(eventName);
+                e.which = keyCode;
+                return e;
+            };
+            let spyCreate;
 
-            before(function () {
-                spyCreate = sinon.stub(todos, 'create');
-            });
+            before(() => spyCreate = sinon.stub(todos, 'create'));
 
-            beforeEach(function () {
-                headerView.ui.input.val('todo1');
-            });
+            beforeEach(() => headerView.ui.input.val('todo1'));
 
-            afterEach(function () {
-                spyCreate.reset();
-            });
+            afterEach(() => spyCreate.reset());
 
             it('on enter key then todos create', function () {
                 headerView.$el.find('#new-todo').trigger(createEvent('keypress', Common.ENTER_KEY));

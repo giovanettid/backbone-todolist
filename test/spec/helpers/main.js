@@ -1,21 +1,21 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 
 global.sinon = sinon;
 global.expect = chai.expect;
 
-var jsdom = require('jsdom');
-var fs = require('fs');
-var markup = fs.readFileSync('app/index.html');
+const jsdom = require('jsdom');
+const fs = require('fs');
+const markup = fs.readFileSync('app/index.html');
 
 global.window = jsdom.jsdom(markup).defaultView;
 
-var requirejs = require('requirejs');
+const requirejs = require('requirejs');
 global.requirejs = requirejs;
 
-var require_helper = function (path) {
+const require_helper = function (path) {
     'use strict';
     return (process.env.APP_DIR_FOR_CODE_COVERAGE || '../app/scripts/') + path;
 };
@@ -27,7 +27,7 @@ requirejs.config({
     },
     paths: {
         jquery: '../node_modules/jquery/dist/jquery',
-        underscore: '../app/bower_components/underscore/underscore',
+        underscore: '../app/bower_components/lodash/dist/lodash.compat',
         backbone: '../app/bower_components/backbone/backbone',
         'backbone.radio': '../app/bower_components/backbone.radio/build/backbone.radio',
         marionette: '../app/bower_components/marionette/lib/backbone.marionette',

@@ -4,24 +4,14 @@ require('../../helpers/main');
 
 module.exports = function () {
 
-    function nthToPosition(nth) {
-        return ['premier', 'deuxième', 'troisième'].indexOf(nth) + 1;
-    }
+    const nthToPosition = (nth) => ['premier', 'deuxième', 'troisième'].indexOf(nth) + 1;
 
-    this.Before(function (callback) {
-        todo.before().then(function () {
-            callback();
-        });
-    });
+    this.Before((callback) => todo.before().then(() => callback()));
 
-    this.After(function (callback) {
-        todo.after().then(function () {
-            callback();
-        });
-    });
+    this.After((callback) => todo.after().then(() => callback()));
 
     this.Given(/(\d+) todos dans la liste/, function (nbTodos, callback) {
-        var i;
+        let i;
         for (i = 1; i <= parseInt(nbTodos); i += 1) {
             todo.typeNew('todo ' + i).enterNew();
         }

@@ -2,9 +2,7 @@
 describe('Todo filter scenario', function() {
     'use strict';
 
-    before(function () {
-        return todo.before();
-    });
+    before(() => todo.before());
 
     it('show completed todo', function () {
         todo.typeNew('first todo').enterNew();
@@ -29,8 +27,6 @@ describe('Todo filter scenario', function() {
         return expect(todo.nbVisible()).to.eventually.have.length(3);
     });
 
-    after(function () {
-        return todo.after();
-    });
+    after(() => todo.after());
 
 });

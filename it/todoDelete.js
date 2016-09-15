@@ -2,9 +2,7 @@
 describe('Todo delete scenario', function () {
     'use strict';
 
-    before(function () {
-        return todo.before();
-    });
+    before(() => todo.before());
 
     it('ajout deux todo dans la todo list et suppression second todo', function () {
         todo.typeNew('first todo').enterNew();
@@ -25,8 +23,6 @@ describe('Todo delete scenario', function () {
         return expect(todo.nbVisible()).to.eventually.be.empty;
     });
 
-    after(function () {
-        return todo.after();
-    });
+    after(() => todo.after());
 
 });

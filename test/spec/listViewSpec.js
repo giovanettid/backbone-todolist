@@ -1,26 +1,18 @@
 describe('listView', function () {
     'use strict';
 
-    var Todo = requirejs('models/todo'),
+    const Todo = requirejs('models/todo'),
         spyFetch = sinon.stub(requirejs('collections/todos'), 'fetch'),
         listView = requirejs('views/listView'),
         filterChannel = requirejs('events/filterChannel');
 
-    before(function () {
-        listView.render();
-    });
+    before(() => listView.render());
 
-    beforeEach(function () {
-        listView.collection.reset();
-    });
+    beforeEach(() => listView.collection.reset());
 
-    after(function () {
-        listView.destroy();
-    });
+    after(() => listView.destroy());
 
-    it('when initialize then fetch', function () {
-        expect(spyFetch).have.been.called;
-    });
+    it('when initialize then fetch', () => expect(spyFetch).have.been.called);
 
     it('when add collection then render todo in TodoView', function () {
         listView.collection.add({title: 'new todo', completed: false});
@@ -43,7 +35,7 @@ describe('listView', function () {
 
     it('when filterState completed and todo completed then filter return true', function () {
         filterChannel.request('filterState').set('filter', 'completed');
-        var todo = new Todo({title: 'new todo', completed: true});
+        const todo = new Todo({title: 'new todo', completed: true});
 
         expect(listView.filter(todo)).to.be.true;
     });

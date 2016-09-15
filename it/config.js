@@ -1,5 +1,5 @@
 
-var config = {};
+const config = {};
 
 config.waitTimeout = 2000;
 
@@ -9,7 +9,7 @@ config.browser = 'chrome';
 config.url = 'http://localhost:9000';
 //config.url = 'http://192.168.99.100:9000';
 
-var options = {};
+const options = {};
 
 options.local = {
     desiredCapabilities: {

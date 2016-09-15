@@ -5,10 +5,10 @@ define([
     'use strict';
 
     var TodoController = Marionette.Object.extend({
-        setFilter: function (params) {
-            filterChannel.request('filterState').set('filter', params || '');
-        }
-    }),
+            setFilter: function (params) {
+                filterChannel.request('filterState').set('filter', params || '');
+            }
+        }),
         todoController = new TodoController(),
         AppRouter = Marionette.AppRouter.extend({
             controller: todoController,

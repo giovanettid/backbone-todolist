@@ -2,9 +2,7 @@
 describe('Todo edit scenario', function () {
     'use strict';
 
-    before(function () {
-        return todo.before();
-    });
+    before(() => todo.before());
 
     it("edition d'un todo", function () {
         todo.typeNew('first todo').enterNew();
@@ -20,9 +18,7 @@ describe('Todo edit scenario', function () {
 
     });
 
-    after(function () {
-        return todo.after();
-    });
+    after(() => todo.after());
 
 });
 

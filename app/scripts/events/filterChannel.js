@@ -5,8 +5,8 @@ define([
     'use strict';
 
     var filterState = new Backbone.Model({
-        filter: ''
-    }),
+            filter: ''
+        }),
         filterChannel = Radio.channel('filter');
 
     filterChannel.reply('filterState', function () {
